@@ -1,0 +1,104 @@
+openapi: 3.0.0
+info:
+  title: HTTP Server API
+  version: 1.0.0
+paths:
+  /tiers:
+    get:
+      summary: Get tier rate limits
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: A JSON object containing tier rate limits
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  Bronze:
+                    type: integer
+                    example: 100
+                  Silver:
+                    type: integer
+                    example: 200
+                  Gold:
+                    type: integer
+                    example: 300
+                  Platinum:
+                    type: integer
+                    example: 400
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal Server Error
+    post:
+      summary: Update tier rate limits
+      security:
+        - basicAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                Bronze:
+                  type: integer
+                  example: 150
+                Silver:
+                  type: integer
+                  example: 250
+      responses:
+        '200':
+          description: Tier rate limits updated successfully
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method Not Allowed
+  /my-llm:
+    get:
+      summary: Get request counter
+      responses:
+        '200':
+          description: A JSON object containing the request counter
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  counter:
+                    type: integer
+                    example: 10
+        '500':
+          description: Internal Server Error
+    post:
+      summary: Increment request counter
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Request counter incremented successfully
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method Not Allowed
+  /my-llm/reset:
+    post:
+      summary: Reset request counter
+      security:
+        - basicAuth: []
+      responses:
+        '200':
+          description: Request counter reset successfully
+        '401':
+          description: Unauthorized
+        '405':
+          description: Method Not Allowed
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
